@@ -21,7 +21,8 @@ def main():
 	screen_height = 600
 	
 	pygame.init()
-	current_pieces = []
+	white_pieces = []
+	black_pieces = []
 
 	board = [[0 for i in range(0,8)] for i in range(0,8)]
 	for i in range(0,8):
@@ -46,10 +47,11 @@ def main():
 	board[7][6] = white_knight(7,6)
 	board[7][7] = white_rook(7,7)
 
-	for row in board:
-		for x in row:
-			if x != 0:
-				current_pieces.append(x)
+	for i in range(8):
+		black_pieces.append(board[0][i])
+		black_pieces.append(board[1][i])
+		white_pieces.append(board[6][i])
+		white_pieces.append(board[7][i])
 
 	screen = pygame.display.set_mode((screen_width, screen_height))
 	pygame.display.set_caption("CHESS!!")
@@ -66,8 +68,16 @@ def main():
 
 	running = True
 	selected = False
-	pos_i = 0
-	pos_j = 0
+	selected_piece = 0
+	legalMoves = []
+	c = 0
+	for i in range(8):
+		for j in range(8):
+			if board[i][j] != 0:
+				board[i][j].print()
+			else:
+				c += 1
+				print(c)
 
 	while running:
 		screen.fill((0,0,0))
@@ -79,23 +89,22 @@ def main():
 		
 		click = pygame.mouse.get_pressed()[0]
 		
-		if click and not selected:
-			if board[temp_j][temp_i] != 0:
-				selected = True
-				pos_i = temp_i
-				pos_j = temp_j
-				print(y,x,temp_i, temp_j, click, selected)
-				board[temp_j][temp_i].change_pos(temp_i,temp_j)
-		
-		elif not click:
-			if selected:
-				selected = False
+		if temp_j >= 0 and temp_j <= 7 and temp_i >= 0 and temp_i <= 7:
+			if click and not selected:
+				if board[temp_j][temp_i] != 0:
+					selected = True
+					selected_piece = board[temp_j][temp_i]
+					print(y,x,temp_i, temp_j, click, selected)
+					legalMoves = selected_piece.legal_moves(board, screen)
+
+			elif click and selected:
 				if board[temp_j][temp_i] == 0:
-					current_pieces.remove(board[temp_j][temp_i])
+					legalMoves.clear()
+					selected = False
 
-		elif selected:
-			board[pos_j][pos_i].change_pos(temp_i,temp_j)
-
+				elif selected_piece != board[temp_j][temp_i]:
+					selected_piece = board[temp_j][temp_i]
+					legalMoves = selected_piece.legal_moves(board, screen)
 
 		for event in pygame.event.get():
 
@@ -103,10 +112,15 @@ def main():
 				running = False
 		
 
-		for x in current_pieces:
+		for x in white_pieces:
 			x.update(screen)
 
-		board[6][3].legal_moves(board, screen)
+		for x in black_pieces:
+			x.update(screen)
+
+		for x in legalMoves:
+			x.update(screen)
+
 
 		pygame.display.update()
 
