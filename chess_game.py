@@ -70,6 +70,7 @@ def main():
 	selected = False
 	selected_piece = 0
 	legalMoves = []
+	legalMoves_pos = []
 	c = 0
 	for i in range(8):
 		for j in range(8):
@@ -84,27 +85,33 @@ def main():
 		screen.blit(chessBoard,(44,44))
 		x, y = pygame.mouse.get_pos()
 		
-		temp_i = int((x-44)/64)
-		temp_j = int((y-44)/64)
+		mouse_pos = (temp_i, temp_j) = (int((x-44)/64), int((y-44)/64))
 		
 		click = pygame.mouse.get_pressed()[0]
 		
+
 		if temp_j >= 0 and temp_j <= 7 and temp_i >= 0 and temp_i <= 7:
-			if click and not selected:
-				if board[temp_j][temp_i] != 0:
+
+			if click:
+				if board[temp_j][temp_i] != 0 and selected_piece != board[temp_j][temp_i]:
 					selected = True
 					selected_piece = board[temp_j][temp_i]
-					print(y,x,temp_i, temp_j, click, selected)
-					legalMoves = selected_piece.legal_moves(board, screen)
-
-			elif click and selected:
-				if board[temp_j][temp_i] == 0:
+					legalMoves, legalMoves_pos = selected_piece.legal_moves(board, screen)
+					print(mouse_pos, legalMoves_pos)
+				
+				elif board[temp_j][temp_i] == 0 and mouse_pos in legalMoves_pos:
+					(tempx, tempy) = (selected_piece.x, selected_piece.y)
+					board[temp_j][temp_i] = selected_piece
+					selected_piece.change_pos(temp_i, temp_j)
+					board[tempy][tempx] = 0
 					legalMoves.clear()
+					legalMoves_pos.clear()
 					selected = False
-
-				elif selected_piece != board[temp_j][temp_i]:
-					selected_piece = board[temp_j][temp_i]
-					legalMoves = selected_piece.legal_moves(board, screen)
+					selected_piece = 0
+				elif board[temp_j][temp_i] == 0:
+					legalMoves.clear()
+					legalMoves_pos.clear()
+					selected_piece = 0
 
 		for event in pygame.event.get():
 
@@ -112,11 +119,10 @@ def main():
 				running = False
 		
 
-		for x in white_pieces:
-			x.update(screen)
-
-		for x in black_pieces:
-			x.update(screen)
+		for row in board:
+			for square in row:
+				if square != 0:
+					square.update(screen)
 
 		for x in legalMoves:
 			x.update(screen)
