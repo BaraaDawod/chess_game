@@ -33,6 +33,7 @@ class white_pawn:
 	def change_pos(self, x, y):
 		self.x = x
 		self.y = y
+		self.two_square_move = False
 	
 	def legal_moves(self, board, screen):
 		moves = []
@@ -42,15 +43,16 @@ class white_pawn:
 			moves.append((self.x, self.y-1))
 			moves.append((self.x, self.y-2))
 
-		elif board[self.y-1][self.x] == 0:
+		elif self.y-1>= 0 and board[self.y-1][self.x] == 0:
 			moves.append((self.x, self.y-1))
 
-		if self.x-1 >= 0:
+		if self.x-1 >= 0 and self.y-1 >= 0:
 			if board[self.y-1][self.x-1] != 0 and board[self.y-1][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y-1))
 
-		if self.x+1 <= 7 and board[self.y-1][self.x+1] != 0 and board[self.y-1][self.x+1].colour != self.colour:
-			moves.append((self.x+1, self.y-1))
+		if self.x+1 <= 7 and self.y-1 >= 0:
+			if board[self.y-1][self.x+1] != 0 and board[self.y-1][self.x+1].colour != self.colour:
+				moves.append((self.x+1, self.y-1))
 
 		for (x,y) in moves:
 			dots.append(dot(x,y, screen))
@@ -80,6 +82,7 @@ class black_pawn:
 	def change_pos(self, x, y):
 		self.x = x
 		self.y = y
+		self.two_square_move = False
 
 	def update(self, screen):
 		x_pos = self.x*64+49
@@ -94,15 +97,16 @@ class black_pawn:
 			moves.append((self.x, self.y+1))
 			moves.append((self.x, self.y+2))
 
-		elif board[self.y+1][self.x] == 0:
+		elif self.y+1 <= 7 and board[self.y+1][self.x] == 0:
 			moves.append((self.x, self.y+1))
 
-		if self.x+1 <= 7:
-			if board[self.y+1][self.x+1] != 0:
+		if self.x+1 <= 7 and self.y+1 <= 7:
+			if board[self.y+1][self.x+1] != 0 and board[self.y+1][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y+1))
 
-		if self.x-1 >= 0 and board[self.y+1][self.x-1] != 0:
-			moves.append((self.x-1, self.y+1))
+		if self.x-1 >= 0 and self.y+1 <= 7:
+			if board[self.y+1][self.x-1] != 0 and board[self.y+1][self.x-1].colour != self.colour:
+				moves.append((self.x-1, self.y+1))
 
 		for (x,y) in moves:
 			dots.append(dot(x,y, screen))
@@ -136,35 +140,35 @@ class white_knight:
 		dots = []
 
 		if self.y-2 >= 0 and self.x-1 >=0:
-			if board[self.y-2][self.x-1] == 0:
+			if board[self.y-2][self.x-1] == 0 or board[self.y-2][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y-2))
 
 		if self.y-2 >= 0 and self.x+1 <=7:
-			if board[self.y-2][self.x+1] == 0:
+			if board[self.y-2][self.x+1] == 0 or board[self.y-2][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y-2))
 
 		if self.y+2 <= 7 and self.x-1 >=0:
-			if board[self.y+2][self.x-1] == 0:
+			if board[self.y+2][self.x-1] == 0 or board[self.y+2][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y+2))
 
 		if self.y+2 <= 7 and self.x+1 <=7:
-			if board[self.y+2][self.x+1] == 0:
+			if board[self.y+2][self.x+1] == 0 or board[self.y+2][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y+2))
 
 		if self.y-1 >= 0 and self.x-2 >=0:
-			if board[self.y-1][self.x-2] == 0:
+			if board[self.y-1][self.x-2] == 0 or board[self.y-1][self.x-2].colour != self.colour:
 				moves.append((self.x-2, self.y-1))
 
 		if self.y-1 >= 0 and self.x+2 <=7:
-			if board[self.y-1][self.x+2] == 0:
+			if board[self.y-1][self.x+2] == 0 or board[self.y-1][self.x+2].colour != self.colour:
 				moves.append((self.x+2, self.y-1))
 
 		if self.y+1 <= 7 and self.x-2 >=0:
-			if board[self.y+1][self.x-2] == 0:
+			if board[self.y+1][self.x-2] == 0 or board[self.y+1][self.x-2].colour != self.colour:
 				moves.append((self.x-2, self.y+1))
 
 		if self.y+1 <= 7 and self.x+2 <=7:
-			if board[self.y+1][self.x+2] == 0:
+			if board[self.y+1][self.x+2] == 0 or board[self.y+1][self.x+2].colour != self.colour:
 				moves.append((self.x+2, self.y+1))
 
 
@@ -199,35 +203,35 @@ class black_knight:
 		dots = []
 
 		if self.y-2 >= 0 and self.x-1 >=0:
-			if board[self.y-2][self.x-1] == 0:
+			if board[self.y-2][self.x-1] == 0 or board[self.y-2][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y-2))
 
 		if self.y-2 >= 0 and self.x+1 <=7:
-			if board[self.y-2][self.x+1] == 0:
+			if board[self.y-2][self.x+1] == 0 or board[self.y-2][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y-2))
 
 		if self.y+2 <= 7 and self.x-1 >=0:
-			if board[self.y+2][self.x-1] == 0:
+			if board[self.y+2][self.x-1] == 0 or board[self.y+2][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y+2))
 
 		if self.y+2 <= 7 and self.x+1 <=7:
-			if board[self.y+2][self.x+1] == 0:
+			if board[self.y+2][self.x+1] == 0 or board[self.y+2][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y+2))
 
 		if self.y-1 >= 0 and self.x-2 >=0:
-			if board[self.y-1][self.x-2] == 0:
+			if board[self.y-1][self.x-2] == 0 or board[self.y-1][self.x-2].colour != self.colour:
 				moves.append((self.x-2, self.y-1))
 
 		if self.y-1 >= 0 and self.x+2 <=7:
-			if board[self.y-1][self.x+2] == 0:
+			if board[self.y-1][self.x+2] == 0 or board[self.y-1][self.x+2].colour != self.colour:
 				moves.append((self.x+2, self.y-1))
 
 		if self.y+1 <= 7 and self.x-2 >=0:
-			if board[self.y+1][self.x-2] == 0:
+			if board[self.y+1][self.x-2] == 0 or board[self.y+1][self.x-2].colour != self.colour:
 				moves.append((self.x-2, self.y+1))
 
 		if self.y+1 <= 7 and self.x+2 <=7:
-			if board[self.y+1][self.x+2] == 0:
+			if board[self.y+1][self.x+2] == 0 or board[self.y+1][self.x+2].colour != self.colour:
 				moves.append((self.x+2, self.y+1))
 
 
@@ -265,6 +269,9 @@ class white_bishop:
 			if self.y+i <= 7 and self.x+i <= 7:
 				if board[self.y+i][self.x+i] == 0:
 					moves.append((self.x+i, self.y+i))
+				elif board[self.y+i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y+i))
+					break
 				else:
 					break
 		
@@ -272,6 +279,9 @@ class white_bishop:
 			if self.y+i <= 7 and self.x-i >= 0:
 				if board[self.y+i][self.x-i] == 0:
 					moves.append((self.x-i, self.y+i))
+				elif board[self.y+i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y+i))
+					break
 				else:
 					break
 
@@ -279,6 +289,9 @@ class white_bishop:
 			if self.y-i >= 0 and self.x+i <= 7:
 				if board[self.y-i][self.x+i] == 0:
 					moves.append((self.x+i, self.y-i))
+				elif board[self.y-i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y-i))
+					break
 				else:
 					break
 
@@ -286,6 +299,9 @@ class white_bishop:
 			if self.y-i >= 0 and self.x-i >= 0:
 				if board[self.y-i][self.x-i] == 0:
 					moves.append((self.x-i, self.y-i))
+				elif board[self.y-i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y-i))
+					break
 				else:
 					break
 
@@ -324,6 +340,9 @@ class black_bishop:
 			if self.y+i <= 7 and self.x+i <= 7:
 				if board[self.y+i][self.x+i] == 0:
 					moves.append((self.x+i, self.y+i))
+				elif board[self.y+i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y+i))
+					break
 				else:
 					break
 		
@@ -331,6 +350,9 @@ class black_bishop:
 			if self.y+i <= 7 and self.x-i >= 0:
 				if board[self.y+i][self.x-i] == 0:
 					moves.append((self.x-i, self.y+i))
+				elif board[self.y+i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y+i))
+					break
 				else:
 					break
 
@@ -338,6 +360,9 @@ class black_bishop:
 			if self.y-i >= 0 and self.x+i <= 7:
 				if board[self.y-i][self.x+i] == 0:
 					moves.append((self.x+i, self.y-i))
+				elif board[self.y-i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y-i))
+					break
 				else:
 					break
 
@@ -345,6 +370,9 @@ class black_bishop:
 			if self.y-i >= 0 and self.x-i >= 0:
 				if board[self.y-i][self.x-i] == 0:
 					moves.append((self.x-i, self.y-i))
+				elif board[self.y-i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y-i))
+					break
 				else:
 					break
 
@@ -383,6 +411,9 @@ class white_rook:
 			if self.y+i <= 7:
 				if board[self.y+i][self.x] == 0:
 					moves.append((self.x, self.y+i))
+				elif board[self.y+i][self.x].colour != self.colour:
+					moves.append((self.x, self.y+i))
+					break
 				else:
 					break
 		
@@ -390,6 +421,9 @@ class white_rook:
 			if self.x-i >= 0:
 				if board[self.y][self.x-i] == 0:
 					moves.append((self.x-i, self.y))
+				elif board[self.y][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y))
+					break
 				else:
 					break
 
@@ -397,6 +431,9 @@ class white_rook:
 			if self.y-i >= 0:
 				if board[self.y-i][self.x] == 0:
 					moves.append((self.x, self.y-i))
+				elif board[self.y-i][self.x].colour != self.colour:
+					moves.append((self.x, self.y-i))
+					break
 				else:
 					break
 
@@ -404,6 +441,9 @@ class white_rook:
 			if self.x+i <= 7:
 				if board[self.y][self.x+i] == 0:
 					moves.append((self.x+i, self.y))
+				elif board[self.y][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y))
+					break
 				else:
 					break
 
@@ -442,6 +482,9 @@ class black_rook:
 			if self.y+i <= 7:
 				if board[self.y+i][self.x] == 0:
 					moves.append((self.x, self.y+i))
+				elif board[self.y+i][self.x].colour != self.colour:
+					moves.append((self.x, self.y+i))
+					break
 				else:
 					break
 		
@@ -449,6 +492,9 @@ class black_rook:
 			if self.x-i >= 0:
 				if board[self.y][self.x-i] == 0:
 					moves.append((self.x-i, self.y))
+				elif board[self.y][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y))
+					break
 				else:
 					break
 
@@ -456,6 +502,9 @@ class black_rook:
 			if self.y-i >= 0:
 				if board[self.y-i][self.x] == 0:
 					moves.append((self.x, self.y-i))
+				elif board[self.y-i][self.x].colour != self.colour:
+					moves.append((self.x, self.y-i))
+					break
 				else:
 					break
 
@@ -463,6 +512,9 @@ class black_rook:
 			if self.x+i <= 7:
 				if board[self.y][self.x+i] == 0:
 					moves.append((self.x+i, self.y))
+				elif board[self.y][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y))
+					break
 				else:
 					break
 
@@ -501,6 +553,9 @@ class white_queen:
 			if self.y+i <= 7 and self.x+i <= 7:
 				if board[self.y+i][self.x+i] == 0:
 					moves.append((self.x+i, self.y+i))
+				elif board[self.y+i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y+i))
+					break
 				else:
 					break
 		
@@ -508,6 +563,9 @@ class white_queen:
 			if self.y+i <= 7 and self.x-i >= 0:
 				if board[self.y+i][self.x-i] == 0:
 					moves.append((self.x-i, self.y+i))
+				elif board[self.y+i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y+i))
+					break
 				else:
 					break
 
@@ -515,6 +573,9 @@ class white_queen:
 			if self.y-i >= 0 and self.x+i <= 7:
 				if board[self.y-i][self.x+i] == 0:
 					moves.append((self.x+i, self.y-i))
+				elif board[self.y-i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y-i))
+					break
 				else:
 					break
 
@@ -522,13 +583,18 @@ class white_queen:
 			if self.y-i >= 0 and self.x-i >= 0:
 				if board[self.y-i][self.x-i] == 0:
 					moves.append((self.x-i, self.y-i))
+				elif board[self.y-i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y-i))
+					break
 				else:
 					break
-					
 		for i  in range(1,8):
 			if self.y+i <= 7:
 				if board[self.y+i][self.x] == 0:
 					moves.append((self.x, self.y+i))
+				elif board[self.y+i][self.x].colour != self.colour:
+					moves.append((self.x, self.y+i))
+					break
 				else:
 					break
 		
@@ -536,6 +602,9 @@ class white_queen:
 			if self.x-i >= 0:
 				if board[self.y][self.x-i] == 0:
 					moves.append((self.x-i, self.y))
+				elif board[self.y][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y))
+					break
 				else:
 					break
 
@@ -543,6 +612,9 @@ class white_queen:
 			if self.y-i >= 0:
 				if board[self.y-i][self.x] == 0:
 					moves.append((self.x, self.y-i))
+				elif board[self.y-i][self.x].colour != self.colour:
+					moves.append((self.x, self.y-i))
+					break
 				else:
 					break
 
@@ -550,6 +622,9 @@ class white_queen:
 			if self.x+i <= 7:
 				if board[self.y][self.x+i] == 0:
 					moves.append((self.x+i, self.y))
+				elif board[self.y][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y))
+					break
 				else:
 					break
 
@@ -588,6 +663,9 @@ class black_queen:
 			if self.y+i <= 7 and self.x+i <= 7:
 				if board[self.y+i][self.x+i] == 0:
 					moves.append((self.x+i, self.y+i))
+				elif board[self.y+i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y+i))
+					break
 				else:
 					break
 		
@@ -595,6 +673,9 @@ class black_queen:
 			if self.y+i <= 7 and self.x-i >= 0:
 				if board[self.y+i][self.x-i] == 0:
 					moves.append((self.x-i, self.y+i))
+				elif board[self.y+i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y+i))
+					break
 				else:
 					break
 
@@ -602,6 +683,9 @@ class black_queen:
 			if self.y-i >= 0 and self.x+i <= 7:
 				if board[self.y-i][self.x+i] == 0:
 					moves.append((self.x+i, self.y-i))
+				elif board[self.y-i][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y-i))
+					break
 				else:
 					break
 
@@ -609,13 +693,18 @@ class black_queen:
 			if self.y-i >= 0 and self.x-i >= 0:
 				if board[self.y-i][self.x-i] == 0:
 					moves.append((self.x-i, self.y-i))
+				elif board[self.y-i][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y-i))
+					break
 				else:
 					break
-					
 		for i  in range(1,8):
 			if self.y+i <= 7:
 				if board[self.y+i][self.x] == 0:
 					moves.append((self.x, self.y+i))
+				elif board[self.y+i][self.x].colour != self.colour:
+					moves.append((self.x, self.y+i))
+					break
 				else:
 					break
 		
@@ -623,6 +712,9 @@ class black_queen:
 			if self.x-i >= 0:
 				if board[self.y][self.x-i] == 0:
 					moves.append((self.x-i, self.y))
+				elif board[self.y][self.x-i].colour != self.colour:
+					moves.append((self.x-i, self.y))
+					break
 				else:
 					break
 
@@ -630,6 +722,9 @@ class black_queen:
 			if self.y-i >= 0:
 				if board[self.y-i][self.x] == 0:
 					moves.append((self.x, self.y-i))
+				elif board[self.y-i][self.x].colour != self.colour:
+					moves.append((self.x, self.y-i))
+					break
 				else:
 					break
 
@@ -637,6 +732,9 @@ class black_queen:
 			if self.x+i <= 7:
 				if board[self.y][self.x+i] == 0:
 					moves.append((self.x+i, self.y))
+				elif board[self.y][self.x+i].colour != self.colour:
+					moves.append((self.x+i, self.y))
+					break
 				else:
 					break
 
@@ -672,35 +770,35 @@ class white_king:
 		dots = []
 
 		if self.y+1 <= 7 and self.x+1 <= 7:
-			if board[self.y+1][self.x+1] == 0:
+			if board[self.y+1][self.x+1] == 0 or board[self.y+1][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y+1))
 	
 		if self.y+1 <= 7 and self.x-1 >= 0:
-			if board[self.y+1][self.x-1] == 0:
+			if board[self.y+1][self.x-1] == 0 or board[self.y+1][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y+1))
 
 		if self.y-1 >= 0 and self.x+1 <= 7:
-			if board[self.y-1][self.x+1] == 0:
+			if board[self.y-1][self.x+1] == 0 or board[self.y-1][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y-1))
 
 		if self.y-1 >= 0 and self.x-1 >= 0:
-			if board[self.y-1][self.x-1] == 0:
+			if board[self.y-1][self.x-1] == 0 or board[self.y-1][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y-1))
 
 		if self.y+1 <= 7:
-			if board[self.y+1][self.x] == 0:
+			if board[self.y+1][self.x] == 0 or board[self.y+1][self.x].colour != self.colour:
 				moves.append((self.x, self.y+1))
 	
 		if self.x-1 >= 0:
-			if board[self.y][self.x-1] == 0:
-				moves.append((self.x-1, self.y))
+			if board[self.y][self.x+1] == 0 or board[self.y][self.x+1].colour != self.colour:
+				moves.append((self.x+1, self.y))
 
 		if self.y-1 >= 0:
-			if board[self.y-1][self.x] == 0:
+			if board[self.y-1][self.x] == 0 or board[self.y-1][self.x].colour != self.colour:
 				moves.append((self.x, self.y-1))
 
 		if self.x-1 >= 0:
-			if board[self.y][self.x-1] == 0:
+			if board[self.y][self.x-1] == 0 or board[self.y][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y))
 
 
@@ -735,35 +833,35 @@ class black_king:
 		dots = []
 
 		if self.y+1 <= 7 and self.x+1 <= 7:
-			if board[self.y+1][self.x+1] == 0:
+			if board[self.y+1][self.x+1] == 0 or board[self.y+1][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y+1))
 	
 		if self.y+1 <= 7 and self.x-1 >= 0:
-			if board[self.y+1][self.x-1] == 0:
+			if board[self.y+1][self.x-1] == 0 or board[self.y+1][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y+1))
 
 		if self.y-1 >= 0 and self.x+1 <= 7:
-			if board[self.y-1][self.x+1] == 0:
+			if board[self.y-1][self.x+1] == 0 or board[self.y-1][self.x+1].colour != self.colour:
 				moves.append((self.x+1, self.y-1))
 
 		if self.y-1 >= 0 and self.x-1 >= 0:
-			if board[self.y-1][self.x-1] == 0:
+			if board[self.y-1][self.x-1] == 0 or board[self.y-1][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y-1))
 
 		if self.y+1 <= 7:
-			if board[self.y+1][self.x] == 0:
+			if board[self.y+1][self.x] == 0 or board[self.y+1][self.x].colour != self.colour:
 				moves.append((self.x, self.y+1))
 	
 		if self.x-1 >= 0:
-			if board[self.y][self.x-1] == 0:
-				moves.append((self.x-1, self.y))
+			if board[self.y][self.x+1] == 0 or board[self.y][self.x+1].colour != self.colour:
+				moves.append((self.x+1, self.y))
 
 		if self.y-1 >= 0:
-			if board[self.y-1][self.x] == 0:
+			if board[self.y-1][self.x] == 0 or board[self.y-1][self.x].colour != self.colour:
 				moves.append((self.x, self.y-1))
 
 		if self.x-1 >= 0:
-			if board[self.y][self.x-1] == 0:
+			if board[self.y][self.x-1] == 0 or board[self.y][self.x-1].colour != self.colour:
 				moves.append((self.x-1, self.y))
 
 
